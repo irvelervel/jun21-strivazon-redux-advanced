@@ -1,12 +1,14 @@
 import { Component } from "react";
 import BookList from "./BookList";
 import BookDetail from "./BookDetail";
-import { Col, Row } from "react-bootstrap";
+import { Alert, Col, Row, Spinner } from "react-bootstrap";
 import { connect } from 'react-redux'
 import { getBooksAction } from "../actions";
 
 const mapStateToProps = (state) => ({
-  books: state.book.stock
+  books: state.book.stock,
+  isError: state.book.isError,
+  isLoading: state.book.isLoading
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -28,7 +30,11 @@ class BookStore extends Component {
   changeBook = (book) => this.setState({ bookSelected: book });
 
   render() {
-    return (
+    return this.props.isError ? (
+      <Alert variant="danger">Error fetching books in stock</Alert>
+    ) : this.props.isLoading ? (
+      <Spinner variant="success" animation="border" />
+    ) : (
       <Row>
         <Col md={4}>
           <BookList

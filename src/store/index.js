@@ -22,6 +22,8 @@ export const initialState = {
   },
   book: {
     stock: [],
+    isError: false,
+    isLoading: false,
   },
 }
 

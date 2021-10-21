@@ -13,6 +13,8 @@ export const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART'
 export const REMOVE_ITEM_FROM_CART = 'REMOVE_ITEM_FROM_CART'
 export const SET_USERNAME = 'SET_USERNAME'
 export const GET_BOOKS = 'GET_BOOKS'
+export const GET_BOOKS_ERROR = 'GET_BOOKS_ERROR'
+export const GET_BOOKS_LOADING = 'GET_BOOKS_LOADING'
 
 export const addToCartAction = (book) => ({
   type: ADD_ITEM_TO_CART,
@@ -54,6 +56,10 @@ export const setUsernameActionWithThunk = (name) => {
 export const getBooksAction = () => {
   return async (dispatch, getState) => {
     console.log('...fetching the books')
+    dispatch({
+      type: GET_BOOKS_LOADING,
+      payload: true,
+    })
     try {
       let resp = await fetch('https://striveschool-api.herokuapp.com/food-books')
       if (resp.ok) {
@@ -63,11 +69,35 @@ export const getBooksAction = () => {
           type: GET_BOOKS,
           payload: books,
         })
+        dispatch({
+          type: GET_BOOKS_ERROR,
+          payload: false,
+        })
+        dispatch({
+          type: GET_BOOKS_LOADING,
+          payload: false,
+        })
       } else {
         console.log('error')
+        dispatch({
+          type: GET_BOOKS_ERROR,
+          payload: true,
+        })
+        dispatch({
+          type: GET_BOOKS_LOADING,
+          payload: false,
+        })
       }
     } catch (error) {
       console.log(error)
+      dispatch({
+        type: GET_BOOKS_ERROR,
+        payload: true,
+      })
+      dispatch({
+        type: GET_BOOKS_LOADING,
+        payload: false,
+      })
     }
   }
 }
