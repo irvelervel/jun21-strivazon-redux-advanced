@@ -2,9 +2,12 @@
 // 1) the initial state of the application
 // 2) the configureStore function execution
 
-import { createStore, combineReducers } from 'redux'
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import cartReducer from '../reducers/cart'
 import userReducer from '../reducers/user'
+import thunk from 'redux-thunk'
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 // 1)
 export const initialState = {
@@ -24,11 +27,10 @@ const bigReducer = combineReducers({
 })
 
 // 2)
-const configureStore = createStore(
-  bigReducer,
-  initialState,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-)
+const configureStore = createStore(bigReducer, initialState, composeEnhancers(applyMiddleware(thunk)))
+
+// now we'll use the third argument of createStore to INJECT a MIDDLEWARE into the flow
+// for applying a middleware we'll need to use a function from redux called applyMiddleware()
 
 export default configureStore
 

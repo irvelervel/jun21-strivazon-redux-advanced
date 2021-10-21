@@ -4,7 +4,7 @@ import FormControl from "react-bootstrap/FormControl";
 import { withRouter } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { connect } from 'react-redux'
-import { setUsernameAction } from '../actions'
+import { setUsernameActionWithThunk } from '../actions'
 
 // mapStateToProps is a function returning an object
 const mapStateToProps = (state) => ({
@@ -15,7 +15,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => ({
   setUsername: (name) => {
-    dispatch(setUsernameAction(name))
+    dispatch(setUsernameActionWithThunk(name))
   }
 })
 
