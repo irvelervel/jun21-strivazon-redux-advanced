@@ -12,6 +12,7 @@
 export const ADD_ITEM_TO_CART = 'ADD_ITEM_TO_CART'
 export const REMOVE_ITEM_FROM_CART = 'REMOVE_ITEM_FROM_CART'
 export const SET_USERNAME = 'SET_USERNAME'
+export const GET_BOOKS = 'GET_BOOKS'
 
 export const addToCartAction = (book) => ({
   type: ADD_ITEM_TO_CART,
@@ -42,5 +43,31 @@ export const setUsernameActionWithThunk = (name) => {
       type: SET_USERNAME,
       payload: name,
     })
+  }
+}
+
+// thanks to redux-thunk we can leverage much more powerful action creators,
+// that do not just return an action, but can return a FUNCTION
+// this function can be async, can be very complex...
+// but at the end of it we can still do the right thing and dispatch the appropriate action
+
+export const getBooksAction = () => {
+  return async (dispatch, getState) => {
+    console.log('...fetching the books')
+    try {
+      let resp = await fetch('https://striveschool-api.herokuapp.com/food-books')
+      if (resp.ok) {
+        let books = await resp.json()
+        // I will need now to dispatch the action with the books I finished fetching!
+        dispatch({
+          type: GET_BOOKS,
+          payload: books,
+        })
+      } else {
+        console.log('error')
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
